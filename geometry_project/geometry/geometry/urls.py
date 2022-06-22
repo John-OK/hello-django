@@ -52,27 +52,66 @@ def circle_area(request):
         area = 3.1415 * radius ** 2
         response = HttpResponse(f"<h1>answer: {area}</h2>")
     except:
+        response.status_code = 418
+    return response
+
+def circle_circumference(request):
+    try:
+        radius = int(request.GET.get("radius"))
+        circumference = 2 * 3.1415 * radius
+        response = HttpResponse(f"<h1>answer: {circumference}</h2>")
+    except:
         return HttpResponse(status=418)        
     return response
 
-def circle_perimeter(request):
+def rectangle_area_url(response, height, width):
     try:
-        radius = int(request.GET.get("radius"))
-        perimeter = 2 * 3.1415 * radius
+        perimeter = height * width
         response = HttpResponse(f"<h1>answer: {perimeter}</h2>")
     except:
-        return HttpResponse(status=418)        
+        return HttpResponse(status=418)
+    return response
+
+
+def rectangle_perimeter_url(request, height, width):
+    try:
+        perimeter = 2 * (height + width)
+        response = HttpResponse(f"<h1>answer: {perimeter}</h2>")
+    except:
+        return HttpResponse(status=418)
+    return response
+
+
+def circle_area_url(request, radius):
+    try:
+        area = 3.1415 * radius ** 2
+        response = HttpResponse(f"<h1>answer: {area}</h2>")
+    except:
+        response.status_code = 418
+    return response
+
+
+def circle_circumference_url(request, radius):
+    try:
+        circumference = 2 * 3.1415 * radius
+        response = HttpResponse(f"<h1>answer: {circumference}</h2>")
+    except:
+        return HttpResponse(status=418)
     return response
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", rootRouteHandler),
-    path('rectangle/area', rectangle_area),
-    path('rectangle/perimeter', rectangle_perimeter),
-    path('circle/area', circle_area),
-    path('circle/perimeter', circle_perimeter),
-    path('rectangle/area/<int:height>/<int:width>', rectangle_area),
-    path('rectangle/perimeter/<int:height>/<int:width>', rectangle_perimeter),
-    path('circle/area/<int:radius>', circle_area),
-    path('circle/perimeter/<int:radius>', circle_perimeter),
+
+    # Query parameters
+    path('rectangle/area/', rectangle_area),
+    path('rectangle/perimeter/', rectangle_perimeter),
+    path('circle/area/', circle_area),
+    path('circle/circumference/', circle_circumference),
+
+    # URL parameters
+    path('rectangle/area/<int:height>/<int:width>/', rectangle_area_url),
+    path('rectangle/perimeter/<int:height>/<int:width>/', rectangle_perimeter_url),
+    path('circle/area/<int:radius>/', circle_area_url),
+    path('circle/circumference/<int:radius>/', circle_circumference_url),
 ]
